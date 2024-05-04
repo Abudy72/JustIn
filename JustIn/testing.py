@@ -1,9 +1,9 @@
-from flask import Flask, request, jsonify
+import json
 import tensorflow as tf
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import pickle
 import numpy as np
-from flask_cors import CORS
+import sys
 
 cats = ['HR',
  'DESIGNER',
@@ -30,8 +30,6 @@ cats = ['HR',
  'ARTS',
  'AVIATION']
 
-app = Flask(__name__)
-CORS(app)
 
 # Load your model and tokenizer
 model = tf.keras.models.load_model('model.h5')
@@ -40,10 +38,7 @@ max_length = 1000
 padding_type='post'
 trunc_type='post'
 
-@app.route('/analyze', methods=['POST'])
-def analyze():
-    content = request.json
-    text = content['text']
+def analyze(text):
     text = text.lower().replace('\s+', ' ').replace('\n', ' ')
     sequences = tokenizer.texts_to_sequences([text])
     padded = pad_sequences(sequences, maxlen=max_length, padding=padding_type, truncating=trunc_type)
@@ -52,10 +47,16 @@ def analyze():
     output = {}
     for i in range(0, 3):
         output[cats[indices[i]]] = float(p[0][indices[i]])
-    return jsonify(output)  # Return the JSON directly
+    return output# Return the JSON directly
 
-if __name__ == '__main__':
-    #print(analyze("fat"))
-    app.run(debug=True)
+analyze("I am cooked")
+
+'''inpt = ast.literal_eval(sys.argv[1]) 
+output = inpt
+output['data_returned'] = analyze(inpt)
+print(json.dumps(output))
+sys.stdout.flush()'''
+
+
 
         
