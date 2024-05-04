@@ -74,7 +74,7 @@ function addSection() {
 
   // Set the HTML content
   newSection.innerHTML = `
-    <h2 class="mb-1.5 body-medium text-color-text">Summary</h2>
+    <h1 class="text-color-text heading-large">Summary</h1>
     <div class="summary-container mr-2">
         <div class="relative truncated-summary">
             <div class="body-small text-color-text whitespace-pre-line description" tabindex="0" role="text" dir="ltr">
