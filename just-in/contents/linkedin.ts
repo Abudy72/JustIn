@@ -61,10 +61,39 @@ test_dict = {
   }
 }
 
+function addSection() {
+  let targetElement = document.querySelector(
+      "#app-container > section.basic-profile-section.bg-color-background-container.pb-2.relative"
+  )
+  // Create a new section element
+  let newSection = document.createElement("section")
+  newSection.setAttribute(
+      "class",
+      "relative about-section bg-color-background-container p-2 pr-0 mt-1"
+  )
+
+  // Set the HTML content
+  newSection.innerHTML = `
+    <h2 class="mb-1.5 body-medium text-color-text">Summary</h2>
+    <div class="summary-container mr-2">
+        <div class="relative truncated-summary">
+            <div class="body-small text-color-text whitespace-pre-line description" tabindex="0" role="text" dir="ltr">
+                I'm Swifter – the CFO & Co-Founder of Major League Hacking (MLH) where I’ve helped build one of the largest developer communities in the world. Our community is where the next generation of technologists and founders learn the skills they need to bring their ideas to life and build their professional networks.
+                I was previously named to the Forbes 30 Under 30 Education category, founded Hacker League (acquired by Intel in 2013), and was the first developer evangelist for SendGrid (IPO 2017, acquired by Twilio in 2019).
+            </div>
+        </div>
+    </div>
+`
+  // Insert the new section after the target element
+  targetElement.parentNode.insertBefore(newSection, targetElement.nextSibling)
+  console.log("newSection5");
+}
+
 window.addEventListener("load", () => {
   scrapeText().then(() => {
-    document.body.style.background = "pink"
-    saveText(test_dict)
-    console.log(readText("theycallmeswift"))
+    document.body.style.background = "lightblue";
+    saveText(test_dict);
+    console.log(readText("theycallmeswift"));
   })
+  addSection();
 })
