@@ -1,9 +1,10 @@
 function run(){
   var url = document.URL
-  if(url.includes('linkedin')){
+  if(url.includes('linkedin') && url.includes('/in')){
 
-    var body = document.getElementsByTagName('body')[0];
+    //var body = document.getElementsByTagName('body')[0];
     //body.innerHTML = '';
+    var sections = document.getElementsByTagName("section");
     var iFrame  = document.createElement("iframe");
     /*iFrame.style.height = "300px";
     iFrame.style.width = "100%";
@@ -13,8 +14,11 @@ function run(){
     iFrame.style.border = "none";
     iFrame.style.zIndex = "1000";*/
     iFrame.src = chrome.runtime.getURL("hullo.html");
-    document.body.appendChild(iFrame);
-
+    document.getElementsByClassName("pv-profile-info-section artdeco-card p4 mb2")[0].appendChild(iFrame);
+    for(let i = 0; i<sections.length; i++){
+      //sections[i].innerHTML = iFrame;
+      console.log(sections[i]);
+    }
   }
 }
 
