@@ -1,3 +1,5 @@
+var isIframe = false;
+
 function run(){
   var url = document.URL
   if(url.includes('linkedin') && url.includes('/in')){
@@ -14,7 +16,10 @@ function run(){
     iFrame.style.border = "none";
     iFrame.style.zIndex = "1000";*/
     iFrame.src = chrome.runtime.getURL("hullo.html");
-    document.getElementsByClassName("pv-profile-info-section artdeco-card p4 mb2")[0].appendChild(iFrame);
+    if(!isIframe){
+      document.getElementsByClassName("pv-profile-info-section artdeco-card p4 mb2")[0].appendChild(iFrame);
+      isIframe = true;
+    }
     for(let i = 0; i<sections.length; i++){
       //sections[i].innerHTML = iFrame;
       console.log(sections[i]);
@@ -23,6 +28,7 @@ function run(){
 }
 
 window.onload = (e) => {  
+  isIframe = false;
   run();
 }
 window.onclick = (e) => {  
