@@ -15,10 +15,8 @@ float:right;
   width: 0;
   position: fixed;
   z-index: 1;
-  top: 0;
-  left: 0;
   background-color: #111;
-  overflow-x: hidden;
+  /*overflow-x: hidden;*/
   transition: 0.5s;
   padding-top: 60px;
 float:right;
@@ -51,15 +49,15 @@ float:right;
 }
 </style>
 <body>
-<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+<span style="font-size:30px;cursor:pointer" >&#9776; open</span>
 <div id="mySidenav" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="javascript:void(0)" class="closebtn" >&times;</a>
   <a href="#">About</a>
   <a href="#">Services</a>
   <a href="#">Clients</a>
   <a href="#">Contact</a>
 </div>
-<script>
+<!--<script>
 function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
 }
@@ -67,6 +65,6 @@ function openNav() {
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
 }
-</script>
+</script>-->
 </body>
 </html>

@@ -2,8 +2,8 @@ function run(){
   var url = document.URL
   if(url.includes('linkedin')){
 
-    /*var body = document.getElementsByTagName('body')[0];
-    body.innerHTML = '';*/
+    var body = document.getElementsByTagName('body')[0];
+    //body.innerHTML = '';
     var iFrame  = document.createElement("iframe");
     /*iFrame.style.height = "300px";
     iFrame.style.width = "100%";
@@ -26,4 +26,4 @@ window.onclick = (e) => {
 }
 window.onscroll = (e) => {
   run();
-}
+} 
