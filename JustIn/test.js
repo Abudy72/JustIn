@@ -1,29 +1,20 @@
-const { spawn } = require('child_process');
+async function analyzeText(inText) {
+    const textData = { text: inText};
+    const response = await fetch('http://localhost:5000/analyze', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(textData)
+    });
 
-// Run a Python script and return output
-function runPythonScript(scriptPath, args) {
+    if (!response.ok) {
+        const message = `An error has occurred: ${response.status}`;
+        throw new Error(message);
+    }
 
-  // Use child_process.spawn method from 
-  // child_process module and assign it to variable
-  const pyProg = spawn('python', [scriptPath].concat(args));
-
-  // Collect data from script and print to console
-  let data = '';
-  pyProg.stdout.on('data', (stdout) => {
-    data += stdout.toString();
-  });
-
-  // Print errors to console, if any
-  pyProg.stderr.on('data', (stderr) => {
-    console.log(`stderr: ${stderr}`);
-  });
-
-  // When script is finished, print collected data
-  pyProg.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
+    const data = await response.json();
     console.log(data);
-  });
 }
 
-// Run the Python file
-runPythonScript('/testing.py', [arg1, arg2]);
+analyzeText("COCK");
