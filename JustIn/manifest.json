@@ -2,12 +2,23 @@
     "manifest_version" : 3,
     "name" : "JustIn",
     "version": "1.0.0",
-    "content_scripts": [{"matches": ["<all_urls>"], "js": ["Content.js"]}],
+    "permissions": [
+      "activeTab"
+    ],
+    "content_scripts": [
+        {
+          "matches": ["https://www.linkedin.com/*"],
+          "js": ["content.js"]
+        }
+    ],
     "icons": { "240": "yes.png"} ,
     "description": "LinkedIn Assistant",
-    "chrome_url_overrides": {"newtab": "Content.js"},
-    "web_accessible_resources": [{ 
-  "resources": ["hullo.html"],
-  "matches": ["<all_urls>"]
-}]
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "yes.png",
+            "48": "yes.png",
+            "128": "yes.png"
+        }
+    }
 }
