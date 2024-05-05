@@ -10,6 +10,7 @@
     "package": "plasmo package"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.10.0",
     "@tinymce/tinymce-react": "^5.0.1",
     "plasmo": "0.86.2",
     "react": "18.2.0",

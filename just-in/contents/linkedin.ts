@@ -117,165 +117,83 @@ test_dict = {
   }
 }
 
-function addSection() {
-  var abt = document.getElementsByClassName('relative about-section bg-color-background-container p-2 pr-0 mt-1');
-  for(var i = 0; i < abt.length; i++){
-    abt[i].style.width = "700px";
-  }
+async function addSection() {
   let targetElement = document.querySelector(
-    "#app-container > section.basic-profile-section.bg-color-background-container.pb-2.relative"
+      "#app-container > section.basic-profile-section.bg-color-background-container.pb-2.relative"
   )
-  // Create a new section element
-  let newSection = document.createElement("section")
-  newSection.setAttribute(
-    "class",
-    "relative about-section bg-color-background-container p-2 pr-0 mt-1"
-  )
+  let counter = 0
+  let comb = await scrapeText();
+  let summary = await run("Please summarize the following in a small paragraph: " + comb);
 
-  // Set the HTML content
-  newSection.innerHTML = `
-  <style>
-  body {
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-ul {
-    list-style-type: none;
-    padding: 5px;
-    margin: 0;
-}
-li {
-    display: inline;
-    margin-right: 10px; 
-}
-button {
-    font-size: 20px;
-    margin-left: 70px;
-    margin-top: 10px;
-    background-color: #D9D9D9;
-    border: 0px;
-    border-radius: 15px;
-}
-.divider {
-    border-bottom: 1px solid red;
-    padding: 0px;
-    margin: 0px;
-}
-#OuterContainer {
-    width: 445px;
-    max-width: auto;
-    max-height: auto;
-    overflow: auto;
-    background-color: #8ab0e2;
-    border: 1px solid black;
-    float: right;
-}
-#mainTitle {
-    padding: 10px;
-    font-weight: bold;
-    background-color: #2667BC;
-    text-align: center;
-    font-size: 35px;
+  try {
+    let data = await categories(comb);
+    let newSection2 = document.createElement("section")
+    newSection2.setAttribute(
+        "class",
+        "relative about-section bg-color-background-container p-2 pr-0 mt-1"
+    )
 
-}
-.subSections {
-    padding-left: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid white;
-    padding-bottom: 5px;
-}
-.subHeading {
-    padding-top: 5px;
-    font-size: 25px;
-    font-weight: bold;
-}
-.subSections p {
-    padding-right: 5px;
-}
-.arrow-box {
-    float: right;
-    top: 50%;
-    right: 0;
-    transform: translateY(-50%);
-    background-color: blue;
-    color: white;
-    padding: 10px;
-    cursor: pointer;
-}
-
-  </style>
-  <div id="OuterContainer">
-  <div id="mainTitle">
-      <div class="arrow-box" id="toggleArrow">&#x3c;</div> 
-      <div>JustIn</div>
-  </div>
-  <div class="subSections">
-      <div class="subHeading">Affinity Scores:</div>
-      <ul>
-          <li>Category A: 97%</li>
-          <li>Category B: 27%</li>
-          <li>Category C: 17%</li>
-      </ul>
-  </div>
-
-  <div class="subSections">
-      <div class="subHeading">Summary:</div>
-      <p id="summary" class="summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
-          in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur 
-          sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </p>
-  </div>
-      
-  <div class="subSections">
-      <div class="subHeading">Notes: </div>
-      <!--Herees where the TinyMCE goes.-->
-      <p id="notes" class='notes'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
-          in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur 
-          sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-  </div>
-
-  <div class="subSections">
-      <button>Suggestion1</button>
-      <button>Suggestion2</button>
-      <p id="geminiResp">Choose a Suggested topic!</p>
-  </div>
-  </div>
-`
-  // Insert the new section after the target element
-  var cats = newSection.getElementsByTagName("li");
-  (async () => {
-    try {
-      var counter = 0
-      var comb = await scrapeText();
-      var summ = await run("Please summarize the following in a small paragraph: " + comb);
-      var summary = newSection.getElementsByClassName("summary")[0];
-      summary.textContent = summ;
-
-      var questions = await run("Based on the paragraph below, generate some point form converstation starters and whatnot: " + summ);
-      //console.log(questions);
-      var notes = newSection.getElementsByClassName("notes")[0];
-      notes.textContent = questions;
-
-      var data = await categories(comb);
-      for (var [key, value] of Object.entries(data)) {
-        console.log(`${key}: ${value}`)
-        value = Math.round(value * 100)
-        cats[counter].textContent = `${key}: ${value}%`
-        counter++
-      }
-    } catch (error) {
-      console.error("Failed to process data:", error)
+    let affinity_string:string = ""
+    for (var [key, value] of Object.entries(data)) {
+      console.log(`${key}: ${value}`)
+      value = Math.round(value * 100)
+      affinity_string += `${key}: ${value}%\n`
+      counter++
     }
-})();
-  targetElement.parentNode.insertBefore(newSection, targetElement.nextSibling)
+    newSection2.innerHTML = `
+  <h1 class="text-color-text heading-large">Affinity</h1>
+    <div class="summary-container mr-2">
+        <div class="relative truncated-summary">
+            <div class="body-small text-color-text whitespace-pre-line description" tabindex="0" role="text" dir="ltr">
+                ${affinity_string}
+            </div>
+        </div>
+    </div>
+  `
+    targetElement.parentNode.insertBefore(newSection2, targetElement.nextSibling)
+    targetElement = newSection2
+  } catch(error) {
+    console.error("Failed to add affinity section")
+    console.error("Failed to process data:", error)
+  }
+
+  try {
+    // Create a new section element
+    let newSection = document.createElement("section")
+    newSection.setAttribute(
+        "class",
+        "relative about-section bg-color-background-container p-2 pr-0 mt-1"
+    )
+    // Set the HTML content
+    newSection.innerHTML = `
+  <h1 class="text-color-text heading-large">Summary</h1>
+    <div class="summary-container mr-2">
+        <div class="relative truncated-summary">
+            <div class="body-small text-color-text whitespace-pre-line description" tabindex="0" role="text" dir="ltr">
+                ${summary}
+            </div>
+        </div>
+    </div>
+  `
+    // Insert the new section after the target element
+    targetElement.parentNode.insertBefore(newSection, targetElement.nextSibling)
+    targetElement = newSection
+  } catch {
+    console.error("Failed to add summary section")
+  }
+
+  try {
+    let questions = await run("Based on the paragraph below, generate some point form converstation starters and whatnot: " + summary);
+    document.getElementById("textBoxArea").value = questions;
+  } catch(error) {
+    console.error("Failed to add affinity section")
+    console.error("Failed to process data:", error)
+  }
 }
 
 window.addEventListener("load", () => {
   scrapeText().then(() => {
-    document.body.style.background = "lightpink"
+    // document.body.style.background = "lightpink"
     saveText(test_dict)
     console.log(readText("theycallmeswift"))
   })
