@@ -49,7 +49,7 @@ def analyze(text):
         output[cats[indices[i]]] = float(p[0][indices[i]])
     return output# Return the JSON directly
 
-analyze("I am cooked")
+print(analyze("I am cooked"))
 
 '''inpt = ast.literal_eval(sys.argv[1]) 
 output = inpt
