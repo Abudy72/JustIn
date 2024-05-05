@@ -1,29 +1,34 @@
-// Function to send data to the Flask server and log the response
-function sendData(text) {
-    fetch('http://localhost:5000/analyze', {  // Update this URL to your Flask server URL
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: text })
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json();  // or response.text() if the server sends back plain text
+async function sendData(text) {
+    try {
+        const response = await fetch('http://localhost:5000/analyze', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ text: text })
+        });
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok.');
         }
-        throw new Error('Network response was not ok.');
-    })
-    .then(data => {
+        
+        const data = await response.json();  // Assuming the server returns JSON
         console.log('Success:', data);
-        for (const [key, value] of Object.entries(data)) {
-            //key is the category and value is the percentage
-            console.log(`${key}: ${value}`);
-        }
-    })
-    .catch((error) => {
+        return data;  // This can now be used when calling sendData
+    } catch (error) {
         console.error('Error:', error);
-    });
+        throw error;  // Rethrow to allow caller to handle it
+    }
 }
 
 // Example usage
-sendData('Sample text to analyze.');
+(async () => {
+    try {
+        const data = await sendData("your text here");
+        for (const [key, value] of Object.entries(data)) {
+            console.log(`${key}: ${value}`);
+        }
+    } catch (error) {
+        console.error('Failed to process data:', error);
+    }
+})();
