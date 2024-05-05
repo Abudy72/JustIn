@@ -182,7 +182,7 @@ button {
 
   <div class="subSections">
       <div class="subHeading">Summary:</div>
-      <p id="summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
+      <p id="summary" class="summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
           incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
           exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
           in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur 
@@ -193,7 +193,7 @@ button {
   <div class="subSections">
       <div class="subHeading">Notes: </div>
       <!--Herees where the TinyMCE goes.-->
-      <p id="notes">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
+      <p id="notes" class='notes'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
           incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
           exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
           in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur 
@@ -223,6 +223,10 @@ button {
         console.error('Failed to process data:', error);
     }
 })();
+  var summary = newSection.getElementsByClassName("summary")[0];
+  summary.textContent = "The summary variable from scraping will go here:";
+  var notes = newSection.getElementsByClassName("notes")[0];
+  notes.textContent = "The notes variable from scraping will go here:";
   targetElement.parentNode.insertBefore(newSection, targetElement.nextSibling)
 }
 
