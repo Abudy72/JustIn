@@ -205,36 +205,6 @@ async function addSection() {
     console.error("Failed to add affinity section")
     console.error("Failed to process data:", error)
   }
-
-
-
-
-  // var cats = newSection.getElementsByTagName("li");
-  // (async () => {
-  //   try {
-  //     var counter = 0
-  //     var comb = await scrapeText();
-  //     var summ = await run("Please summarize the following in a small paragraph: " + comb);
-  //     var summary = newSection.getElementsByClassName("summary")[0];
-  //     summary.textContent = summ;
-  //
-  //     var questions = await run("Based on the paragraph below, generate some point form converstation starters and whatnot: " + summ);
-  //     //console.log(questions);
-  //     var notes = newSection.getElementsByClassName("notes")[0];
-  //     notes.textContent = questions;
-  //
-  //     var data = await categories(comb);
-  //     for (var [key, value] of Object.entries(data)) {
-  //       console.log(`${key}: ${value}`)
-  //       value = Math.round(value * 100)
-  //       cats[counter].textContent = `${key}: ${value}%`
-  //       counter++
-  //     }
-  //   } catch (error) {
-  //     console.error("Failed to process data:", error)
-  //   }
-// })();
-
 }
 
 window.addEventListener("load", () => {
