@@ -212,9 +212,11 @@ button {
   (async () => {
     try {
         var counter = 0;
-        const data = await categories("your text here");
-        for (const [key, value] of Object.entries(data)) {
-            cats[counter].textContent = (`${key}: ${value}`);
+        var data = await categories("your text here");
+        for (var [key, value] of Object.entries(data)) {
+            console.log(`${key}: ${value}`);
+            value = (Math.round(value*100));
+            cats[counter].textContent = (`${key}: ${value}%`);
             counter++;
         }
     } catch (error) {

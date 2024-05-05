@@ -4,8 +4,10 @@ import tensorflow as tf
 from keras.utils import pad_sequences
 import pickle
 import numpy as np
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # Load your model and tokenizer
 model = tf.keras.models.load_model('model.h5')
