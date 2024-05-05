@@ -86,12 +86,11 @@ function addSection() {
 `
   // Insert the new section after the target element
   targetElement.parentNode.insertBefore(newSection, targetElement.nextSibling)
-  console.log("newSection5");
 }
 
 window.addEventListener("load", () => {
   scrapeText().then(() => {
-    document.body.style.background = "lightblue";
+    document.body.style.background = "lightpink";
     saveText(test_dict);
     console.log(readText("theycallmeswift"));
   })
