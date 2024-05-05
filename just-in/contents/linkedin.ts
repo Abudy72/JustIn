@@ -6,6 +6,31 @@ export const config: PlasmoCSConfig = {
   matches: ["https://www.linkedin.com/*"]
 }
 
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import dotenv from "dotenv";
+dotenv.config();
+
+// Access your API key (see "Set up your API key" above)
+const genAI = new GoogleGenerativeAI("AIzaSyCIa2mJ6D8s2l5nUqtuHT4ijUoexTb6odM");
+// document.addEventListener('DOMContentLoaded', function() {
+//     var tab = document.getElementById('expandable-tab');
+//
+//     tab.addEventListener('click', function() {
+//         tab.classList.toggle('hidden');
+//     });
+// });
+
+async function run(prompt) {
+  // For text-only input, use the gemini-pro model
+  const model = genAI.getGenerativeModel({ model: "gemini-pro"});
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const text = response.text();
+  return text;
+}
+
+
 async function categories(text) {
   try {
     const response = await fetch("http://localhost:5000/analyze", {
@@ -95,7 +120,7 @@ test_dict = {
 function addSection() {
   var abt = document.getElementsByClassName('relative about-section bg-color-background-container p-2 pr-0 mt-1');
   for(var i = 0; i < abt.length; i++){
-    abt[i].style.width = 30;
+    abt[i].style.width = "700px";
   }
   let targetElement = document.querySelector(
     "#app-container > section.basic-profile-section.bg-color-background-container.pb-2.relative"
@@ -224,22 +249,26 @@ button {
   (async () => {
     try {
       var counter = 0
-      
-      var data = await categories(await scrapeText())
+      var data = await categories(comb);
       for (var [key, value] of Object.entries(data)) {
         console.log(`${key}: ${value}`)
         value = Math.round(value * 100)
         cats[counter].textContent = `${key}: ${value}%`
         counter++
       }
+      var comb = await scrapeText();
+      var summ = await run("Please summarize the following in a small paragraph: " + comb);
+      var summary = newSection.getElementsByClassName("summary")[0];
+      summary.textContent = summ;
+
+      var questions = await run("Based on the paragraph below, generate some point form converstation starters and whatnot: " + summ);
+      //console.log(questions);
+      var notes = newSection.getElementsByClassName("notes")[0];
+      notes.textContent = questions;
     } catch (error) {
       console.error("Failed to process data:", error)
     }
 })();
-  var summary = newSection.getElementsByClassName("summary")[0];
-  summary.textContent = "The summary variable from scraping will go here:";
-  var notes = newSection.getElementsByClassName("notes")[0];
-  notes.textContent = "The notes variable from scraping will go here:";
   targetElement.parentNode.insertBefore(newSection, targetElement.nextSibling)
 }
 
