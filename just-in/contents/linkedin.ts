@@ -6,6 +6,29 @@ export const config: PlasmoCSConfig = {
   matches: ["https://www.linkedin.com/*"]
 }
 
+async function categories(text) {
+  try {
+      const response = await fetch('http://localhost:5000/analyze', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ text: text })
+      });
+      
+      if (!response.ok) {
+          throw new Error('Network response was not ok.');
+      }
+      
+      const data = await response.json();  // Assuming the server returns JSON
+      console.log('Success:', data);
+      return data;  // This can now be used when calling sendData
+  } catch (error) {
+      console.error('Error:', error);
+      throw error;  // Rethrow to allow caller to handle it
+  }
+}
+
 async function scrapeText() {
   function selectText(selector) {
     const elements = document.querySelectorAll(selector)
@@ -185,6 +208,19 @@ button {
   </div>
 `
   // Insert the new section after the target element
+  var cats = newSection.getElementsByTagName('li');
+  (async () => {
+    try {
+        var counter = 0;
+        const data = await categories("your text here");
+        for (const [key, value] of Object.entries(data)) {
+            cats[counter].textContent = (`${key}: ${value}`);
+            counter++;
+        }
+    } catch (error) {
+        console.error('Failed to process data:', error);
+    }
+})();
   targetElement.parentNode.insertBefore(newSection, targetElement.nextSibling)
 }
 
