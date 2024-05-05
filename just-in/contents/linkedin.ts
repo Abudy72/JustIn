@@ -121,7 +121,6 @@ async function addSection() {
   let targetElement = document.querySelector(
       "#app-container > section.basic-profile-section.bg-color-background-container.pb-2.relative"
   )
-  let counter = 0
   let comb = await scrapeText();
   let summary = await run("Please summarize the following in a small paragraph: " + comb);
 
@@ -133,23 +132,96 @@ async function addSection() {
         "relative about-section bg-color-background-container p-2 pr-0 mt-1"
     )
 
-    let affinity_string:string = ""
+    let affinity_string:string = '<div class="affinity-container">';
     for (var [key, value] of Object.entries(data)) {
       console.log(`${key}: ${value}`)
       value = Math.round(value * 100)
-      affinity_string += `${key}: ${value}%\n`
-      counter++
-    }
-    newSection2.innerHTML = `
-  <h1 class="text-color-text heading-large">Affinity</h1>
-    <div class="summary-container mr-2">
-        <div class="relative truncated-summary">
-            <div class="body-small text-color-text whitespace-pre-line description" tabindex="0" role="text" dir="ltr">
-                ${affinity_string}
-            </div>
+      affinity_string += `
+      <div class="affinity-item">
+        <span class="affinity-key">${key}:</span>
+        <div class="progress-circle" style="--percentage: ${value}">
+          <svg viewBox="0 0 36 36">
+            <path class="circle-bg"
+              d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+              fill="none" stroke="#eee" stroke-width="2.5"/>
+            <path class="circle"
+              stroke-dasharray="${value}, 100"
+              d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+              fill="none" stroke="deepskyblue" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <span class="affinity-value">${value}%</span>
         </div>
+      </div>`;
+    }
+    affinity_string += '</div>'
+    newSection2.innerHTML = `
+    <style>
+  .affinity-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .affinity-item {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.2em;
+    margin: 10px;
+  }
+  .affinity-key {
+    font-weight: bold;
+    margin-bottom: 5px; /* Add space between the label and circle */
+  }
+  .progress-circle {
+    position: relative;
+    width: 60px; /* Size of the circle */
+    height: 60px;
+    display: flex;
+    align-items: center; /* Align text in the center */
+    justify-content: center; /* Center text horizontally */
+  }
+  .progress-circle svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+  .progress-circle .affinity-value {
+    position: relative;
+    z-index: 1; /* Ensures text is above the SVG */
+    font-size: 1em; /* Larger font size */
+    font-weight: bold;
+  }
+  .circle-bg {
+    fill: none;
+    stroke: #eee;
+    stroke-width: 3.8;
+  }
+  .circle {
+    fill: none;
+    stroke: #0077B5;
+    stroke-width: 3.8;
+    stroke-linecap: round;
+  }
+</style>
+
+  
+  <h1 class="text-color-text heading-large">Affinity</h1>
+  <div class="summary-container mr-2">
+    <div class="relative truncated-summary">
+      <div class="body-small text-color-text whitespace-pre-line description" tabindex="0" role="text" dir="ltr">
+        ${affinity_string}
+      </div>
     </div>
-  `
+  </div>`;
+
     targetElement.parentNode.insertBefore(newSection2, targetElement.nextSibling)
     targetElement = newSection2
   } catch(error) {
