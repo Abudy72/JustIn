@@ -121,28 +121,88 @@ async function addSection() {
   let targetElement = document.querySelector(
       "#app-container > section.basic-profile-section.bg-color-background-container.pb-2.relative"
   )
-  // Create a new section element
-  let newSection = document.createElement("section")
-  newSection.setAttribute(
-      "class",
-      "relative about-section bg-color-background-container p-2 pr-0 mt-1"
-  )
-  // Set the HTML content
-  var comb = await scrapeText();
-  var summ = await run("Please summarize the following in a small paragraph: " + comb);
-  console.log(summ);
-  newSection.innerHTML = `
-  <h1 class="text-color-text heading-large">Affinity</h1>
+  let counter = 0
+  let comb = await scrapeText();
+  let summary = await run("Please summarize the following in a small paragraph: " + comb);
+  try {
+    // Create a new section element
+    let newSection = document.createElement("section")
+    newSection.setAttribute(
+        "class",
+        "relative about-section bg-color-background-container p-2 pr-0 mt-1"
+    )
+    // Set the HTML content
+    newSection.innerHTML = `
+  <h1 class="text-color-text heading-large">Summary</h1>
     <div class="summary-container mr-2">
         <div class="relative truncated-summary">
             <div class="body-small text-color-text whitespace-pre-line description" tabindex="0" role="text" dir="ltr">
-                ${summ}
+                ${summary}
             </div>
         </div>
     </div>
   `
-  // Insert the new section after the target element
-  targetElement.parentNode.insertBefore(newSection, targetElement.nextSibling)
+    // Insert the new section after the target element
+    targetElement.parentNode.insertBefore(newSection, targetElement.nextSibling)
+    targetElement = newSection
+  } catch {
+    console.error("Failed to add summary section")
+  }
+
+  try {
+    let data = await categories(comb);
+    let newSection2 = document.createElement("section")
+    newSection2.setAttribute(
+        "class",
+        "relative about-section bg-color-background-container p-2 pr-0 mt-1"
+    )
+
+    let affinity_string:string = ""
+    for (var [key, value] of Object.entries(data)) {
+      console.log(`${key}: ${value}`)
+      value = Math.round(value * 100)
+      affinity_string += `${key}: ${value}%\n`
+      counter++
+    }
+    newSection2.innerHTML = `
+  <h1 class="text-color-text heading-large">Affinity</h1>
+    <div class="summary-container mr-2">
+        <div class="relative truncated-summary">
+            <div class="body-small text-color-text whitespace-pre-line description" tabindex="0" role="text" dir="ltr">
+                ${affinity_string}
+            </div>
+        </div>
+    </div>
+  `
+    targetElement.parentNode.insertBefore(newSection2, targetElement.nextSibling)
+    targetElement = newSection
+  } catch(error) {
+    console.error("Failed to add affinity section")
+    console.error("Failed to process data:", error)
+  }
+
+  try {
+    let questions = await run("Based on the paragraph below, generate some point form converstation starters and whatnot: " + summary);
+    let newSection3 = document.createElement("section")
+    newSection3.setAttribute(
+        "class",
+        "relative about-section bg-color-background-container p-2 pr-0 mt-1"
+    )
+    newSection3.innerHTML = `
+  <h1 class="text-color-text heading-large">Notes</h1>
+    <div class="summary-container mr-2">
+        <div class="relative truncated-summary">
+            <div class="body-small text-color-text whitespace-pre-line description" tabindex="0" role="text" dir="ltr">
+                ${questions}
+            </div>
+        </div>
+    </div>
+  `
+    targetElement.parentNode.insertBefore(newSection3, targetElement.nextSibling)
+  } catch(error) {
+    console.error("Failed to add affinity section")
+    console.error("Failed to process data:", error)
+  }
 
 
   // var cats = newSection.getElementsByTagName("li");
@@ -175,7 +235,7 @@ async function addSection() {
 
 window.addEventListener("load", () => {
   scrapeText().then(() => {
-    document.body.style.background = "lightpink"
+    // document.body.style.background = "lightpink"
     saveText(test_dict)
     console.log(readText("theycallmeswift"))
   })
