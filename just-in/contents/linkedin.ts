@@ -8,33 +8,35 @@ export const config: PlasmoCSConfig = {
 
 async function categories(text) {
   try {
-      const response = await fetch('http://localhost:5000/analyze', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ text: text })
-      });
-      
-      if (!response.ok) {
-          throw new Error('Network response was not ok.');
-      }
-      
-      const data = await response.json();  // Assuming the server returns JSON
-      console.log('Success:', data);
-      return data;  // This can now be used when calling sendData
+    const response = await fetch("http://localhost:5000/analyze", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ text: text })
+    })
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok.")
+    }
+
+    const data = await response.json() // Assuming the server returns JSON
+    console.log("Success:", data)
+    return data // This can now be used when calling sendData
   } catch (error) {
-      console.error('Error:', error);
-      throw error;  // Rethrow to allow caller to handle it
+    console.error("Error:", error)
+    throw error // Rethrow to allow caller to handle it
   }
 }
 
 async function scrapeText() {
-  function selectText(selector) {
+  let combined_text: string = "";
+  function selectText(selector: string) {
     const elements = document.querySelectorAll(selector)
     if (elements.length > 0) {
       elements.forEach((element) => {
-        console.log(element.innerText.trim().replace(/\s/g, " "))
+        // console.log(element.innerText.trim().replace(/\s/g, " "))
+        combined_text += element.innerText.trim().replace(/\s/g, " ");
       })
     } else {
       console.log("No elements found with the selector: " + selector)
@@ -60,6 +62,12 @@ async function scrapeText() {
   selectText(
     "#app-container > section.relative.about-section.bg-color-background-container.p-2.pr-0.mt-1"
   )
+  // skills
+  console.log("skills")
+  selectText(
+      "#app-container > section.bg-color-background-container.py-2.pl-2.mt-1.collapsible-list-container.skills-container.relative > ol > li"
+  )
+  return combined_text;
 }
 
 function saveText(json_data) {
@@ -86,13 +94,13 @@ test_dict = {
 
 function addSection() {
   let targetElement = document.querySelector(
-      "#app-container > section.basic-profile-section.bg-color-background-container.pb-2.relative"
+    "#app-container > section.basic-profile-section.bg-color-background-container.pb-2.relative"
   )
   // Create a new section element
   let newSection = document.createElement("section")
   newSection.setAttribute(
-      "class",
-      "relative about-section bg-color-background-container p-2 pr-0 mt-1"
+    "class",
+    "relative about-section bg-color-background-container p-2 pr-0 mt-1"
   )
 
   // Set the HTML content
@@ -208,29 +216,30 @@ button {
   </div>
 `
   // Insert the new section after the target element
-  var cats = newSection.getElementsByTagName('li');
-  (async () => {
+  var cats = newSection.getElementsByTagName("li")
+  ;(async () => {
     try {
-        var counter = 0;
-        var data = await categories("your text here");
-        for (var [key, value] of Object.entries(data)) {
-            console.log(`${key}: ${value}`);
-            value = (Math.round(value*100));
-            cats[counter].textContent = (`${key}: ${value}%`);
-            counter++;
-        }
+      var counter = 0
+      
+      var data = await categories(await scrapeText())
+      for (var [key, value] of Object.entries(data)) {
+        console.log(`${key}: ${value}`)
+        value = Math.round(value * 100)
+        cats[counter].textContent = `${key}: ${value}%`
+        counter++
+      }
     } catch (error) {
-        console.error('Failed to process data:', error);
+      console.error("Failed to process data:", error)
     }
-})();
+  })()
   targetElement.parentNode.insertBefore(newSection, targetElement.nextSibling)
 }
 
 window.addEventListener("load", () => {
   scrapeText().then(() => {
-    document.body.style.background = "lightpink";
-    saveText(test_dict);
-    console.log(readText("theycallmeswift"));
+    document.body.style.background = "lightpink"
+    saveText(test_dict)
+    console.log(readText("theycallmeswift"))
   })
-  addSection();
+  addSection()
 })
