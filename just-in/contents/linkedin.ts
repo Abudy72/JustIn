@@ -264,10 +264,9 @@ async function addSection() {
 }
 
 window.addEventListener("load", () => {
-  scrapeText().then(() => {
+  scrapeText();
     // document.body.style.background = "lightpink"
-    saveText(test_dict)
-    console.log(readText("theycallmeswift"))
-  })
-  addSection()
+    // saveText(test_dict)
+    // console.log(readText("theycallmeswift"))
+  addSection();
 })
