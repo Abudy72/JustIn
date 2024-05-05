@@ -256,23 +256,7 @@ async function addSection() {
 
   try {
     let questions = await run("Based on the paragraph below, generate some point form converstation starters and whatnot: " + summary);
-    let newSection3 = document.createElement("section")
-    newSection3.setAttribute(
-        "class",
-        "relative about-section bg-color-background-container p-2 pr-0 mt-1"
-    )
-    newSection3.innerHTML = `
-  <h1 class="text-color-text heading-large">Notes</h1>
-    <div class="summary-container mr-2">
-        <div class="relative truncated-summary">
-            <div class="body-small text-color-text whitespace-pre-line description" tabindex="0" role="text" dir="ltr">
-                ${questions}
-            </div>
-        </div>
-    </div>
-  `
-    targetElement.parentNode.insertBefore(newSection3, targetElement.nextSibling)
-    targetElement = newSection3
+    document.getElementById("textBoxArea").value = questions;
   } catch(error) {
     console.error("Failed to add affinity section")
     console.error("Failed to process data:", error)
