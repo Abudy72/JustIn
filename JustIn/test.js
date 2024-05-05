@@ -15,6 +15,10 @@ function sendData(text) {
     })
     .then(data => {
         console.log('Success:', data);
+        for (const [key, value] of Object.entries(data)) {
+            //key is the category and value is the percentage
+            console.log(`${key}: ${value}`);
+        }
     })
     .catch((error) => {
         console.error('Error:', error);
