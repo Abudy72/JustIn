@@ -93,6 +93,10 @@ test_dict = {
 }
 
 function addSection() {
+  var abt = document.getElementsByClassName('relative about-section bg-color-background-container p-2 pr-0 mt-1');
+  for(var i = 0; i < abt.length; i++){
+    abt[i].style.width = 30;
+  }
   let targetElement = document.querySelector(
     "#app-container > section.basic-profile-section.bg-color-background-container.pb-2.relative"
   )
@@ -216,8 +220,8 @@ button {
   </div>
 `
   // Insert the new section after the target element
-  var cats = newSection.getElementsByTagName("li")
-  ;(async () => {
+  var cats = newSection.getElementsByTagName("li");
+  (async () => {
     try {
       var counter = 0
       
