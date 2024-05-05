@@ -249,13 +249,6 @@ button {
   (async () => {
     try {
       var counter = 0
-      var data = await categories(comb);
-      for (var [key, value] of Object.entries(data)) {
-        console.log(`${key}: ${value}`)
-        value = Math.round(value * 100)
-        cats[counter].textContent = `${key}: ${value}%`
-        counter++
-      }
       var comb = await scrapeText();
       var summ = await run("Please summarize the following in a small paragraph: " + comb);
       var summary = newSection.getElementsByClassName("summary")[0];
@@ -265,6 +258,14 @@ button {
       //console.log(questions);
       var notes = newSection.getElementsByClassName("notes")[0];
       notes.textContent = questions;
+
+      var data = await categories(comb);
+      for (var [key, value] of Object.entries(data)) {
+        console.log(`${key}: ${value}`)
+        value = Math.round(value * 100)
+        cats[counter].textContent = `${key}: ${value}%`
+        counter++
+      }
     } catch (error) {
       console.error("Failed to process data:", error)
     }
