@@ -57,11 +57,12 @@ export default function App() {
   };
   return (
     <>
-      <div>
-        <img src="/icon.png" width={200} style={{ float: "left" }} />
-        <h1>Bieber Browser</h1>
+      <div className="flex gap-52 p-4 justify-between">
+        <img src="/icon.png" className="w-40 rounded-full" />
+        <h1 className="text-6xl font-bold">Bieber Browser</h1>
+        <img src="/icon.png" className="w-40 rounded-full" />
       </div>
-      <div>
+      <div className="flex justify-center">
         <Editor
           apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
           onInit={(_evt, editor) => (editorRef.current = editor)}
@@ -88,12 +89,29 @@ export default function App() {
               "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
           }}
         />
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <button onClick={handleFileOpen}>Open File</button>
-          <div>
-            <button onClick={handleSaveFile}>Save As</button>
-            <button onClick={handleSaveFileNoPrompt}>Save</button>
-          </div>
+      </div>
+      <div className="justify-between flex p-3">
+        <div className="items-star">
+          <button
+            onClick={handleFileOpen}
+            className="border border-bieber3-500 rounded-2xl p-3 fill-bieber3 bg-bieber3 text-bieber1 hover:bg-bieber2 hover:text-bieber4"
+          >
+            Open File
+          </button>
+        </div>
+        <div className="items-end">
+          <button
+            onClick={handleSaveFile}
+            className="border border-bieber3-500 rounded-2xl p-3 fill-bieber3 bg-bieber5 text-bieber1 hover:bg-bieber2 hover:text-bieber4"
+          >
+            Save As
+          </button>
+          <button
+            onClick={handleSaveFileNoPrompt}
+            className="border border-bieber3-500 rounded-2xl p-3 fill-bieber3 bg-bieber5 text-bieber1 hover:bg-bieber2 hover:text-bieber4"
+          >
+            Save
+          </button>
         </div>
       </div>
     </>
